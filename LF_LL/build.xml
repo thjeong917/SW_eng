@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="lf_ll" default="all">
+  
+  
+  <property file="build.properties"/>
+  <!-- Uncomment the following property if no tests compilation is needed -->
+  <!-- 
+  <property name="skip.tests" value="true"/>
+   -->
+  
+  <!-- Compiler options -->
+  
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="700m"/>
+  <patternset id="ignored.files">
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/*.rbc/**"/>
+    <exclude name="**/*.yarb/**"/>
+    <exclude name="**/*~/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.git/**"/>
+    <exclude name="**/.hg/**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/__pycache__/**"/>
+    <exclude name="**/_svn/**"/>
+    <exclude name="**/vssver.scc/**"/>
+    <exclude name="**/vssver2.scc/**"/>
+  </patternset>
+  <patternset id="library.patterns">
+    <include name="*.egg"/>
+    <include name="*.jar"/>
+    <include name="*.ear"/>
+    <include name="*.swc"/>
+    <include name="*.war"/>
+    <include name="*.ane"/>
+    <include name="*.zip"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <exclude name="**/?*.java"/>
+    <exclude name="**/?*.form"/>
+    <exclude name="**/?*.class"/>
+    <exclude name="**/?*.groovy"/>
+    <exclude name="**/?*.scala"/>
+    <exclude name="**/?*.flex"/>
+    <exclude name="**/?*.kt"/>
+    <exclude name="**/?*.clj"/>
+    <exclude name="**/?*.aj"/>
+  </patternset>
+  
+  <!-- Modules -->
+  
+  
+  <!-- Module LF_LL -->
+  
+  <dirname property="module.lf_ll.basedir" file="${ant.file}"/>
+  
+  
+  
+  <property name="compiler.args.lf_ll" value="-encoding UTF-8 -source 9 -target 9 ${compiler.args}"/>
+  
+  <property name="lf_ll.output.dir" value="${module.lf_ll.basedir}/out/production/LF_LL"/>
+  <property name="lf_ll.testoutput.dir" value="${module.lf_ll.basedir}/out/test/LF_LL"/>
+  
+  <path id="lf_ll.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="lf_ll.module.production.classpath"/>
+  
+  <path id="lf_ll.runtime.production.module.classpath">
+    <pathelement location="${lf_ll.output.dir}"/>
+  </path>
+  
+  <path id="lf_ll.module.classpath">
+    <pathelement location="${lf_ll.output.dir}"/>
+  </path>
+  
+  <path id="lf_ll.runtime.module.classpath">
+    <pathelement location="${lf_ll.testoutput.dir}"/>
+    <pathelement location="${lf_ll.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.lf_ll">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.lf_ll">
+    <patternset refid="excluded.from.module.lf_ll"/>
+  </patternset>
+  
+  <path id="lf_ll.module.sourcepath">
+    <dirset dir="${module.lf_ll.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.lf_ll" depends="compile.module.lf_ll.production,compile.module.lf_ll.tests" description="Compile module LF_LL"/>
+  
+  <target name="compile.module.lf_ll.production" description="Compile module LF_LL; production classes">
+    <mkdir dir="${lf_ll.output.dir}"/>
+    <javac destdir="${lf_ll.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
+      <compilerarg line="${compiler.args.lf_ll}"/>
+      <bootclasspath refid="lf_ll.module.bootclasspath"/>
+      <classpath refid="lf_ll.module.production.classpath"/>
+      <src refid="lf_ll.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.lf_ll"/>
+    </javac>
+    
+    <copy todir="${lf_ll.output.dir}">
+      <fileset dir="${module.lf_ll.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.lf_ll.tests" depends="compile.module.lf_ll.production" description="compile module LF_LL; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.lf_ll" description="cleanup module">
+    <delete dir="${lf_ll.output.dir}"/>
+    <delete dir="${lf_ll.testoutput.dir}"/>
+  </target>
+  
+  <target name="init" description="Build initialization">
+    <!-- Perform any build initialization in this target -->
+  </target>
+  
+  <target name="clean" depends="clean.module.lf_ll" description="cleanup all"/>
+  
+  <target name="build.modules" depends="init, clean, compile.module.lf_ll" description="build all modules"/>
+  
+  <target name="all" depends="build.modules" description="build all"/>
+</project>

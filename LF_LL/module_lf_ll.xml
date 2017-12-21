@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_lf_ll" default="compile.module.lf_ll">
+  <dirname property="module.lf_ll.basedir" file="${ant.file.module_lf_ll}"/>
+  
+  <property name="module.jdk.home.lf_ll" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.lf_ll" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.lf_ll" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.lf_ll" value="-encoding UTF-8 -source 9 -target 9 ${compiler.args}"/>
+  
+  <property name="lf_ll.output.dir" value="${module.lf_ll.basedir}/out/production/LF_LL"/>
+  <property name="lf_ll.testoutput.dir" value="${module.lf_ll.basedir}/out/test/LF_LL"/>
+  
+  <path id="lf_ll.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="lf_ll.module.production.classpath">
+    <path refid="${module.jdk.classpath.lf_ll}"/>
+  </path>
+  
+  <path id="lf_ll.runtime.production.module.classpath">
+    <pathelement location="${lf_ll.output.dir}"/>
+  </path>
+  
+  <path id="lf_ll.module.classpath">
+    <path refid="${module.jdk.classpath.lf_ll}"/>
+    <pathelement location="${lf_ll.output.dir}"/>
+  </path>
+  
+  <path id="lf_ll.runtime.module.classpath">
+    <pathelement location="${lf_ll.testoutput.dir}"/>
+    <pathelement location="${lf_ll.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.lf_ll">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.lf_ll">
+    <patternset refid="excluded.from.module.lf_ll"/>
+  </patternset>
+  
+  <path id="lf_ll.module.sourcepath">
+    <dirset dir="${module.lf_ll.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.lf_ll" depends="compile.module.lf_ll.production,compile.module.lf_ll.tests" description="Compile module LF_LL"/>
+  
+  <target name="compile.module.lf_ll.production" depends="register.custom.compilers" description="Compile module LF_LL; production classes">
+    <mkdir dir="${lf_ll.output.dir}"/>
+    <javac2 destdir="${lf_ll.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.lf_ll}/javac">
+      <compilerarg line="${compiler.args.lf_ll}"/>
+      <bootclasspath refid="lf_ll.module.bootclasspath"/>
+      <classpath refid="lf_ll.module.production.classpath"/>
+      <src refid="lf_ll.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.lf_ll"/>
+    </javac2>
+    
+    <copy todir="${lf_ll.output.dir}">
+      <fileset dir="${module.lf_ll.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.lf_ll.tests" depends="register.custom.compilers,compile.module.lf_ll.production" description="compile module LF_LL; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.lf_ll" description="cleanup module">
+    <delete dir="${lf_ll.output.dir}"/>
+    <delete dir="${lf_ll.testoutput.dir}"/>
+  </target>
+</project>
